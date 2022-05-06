@@ -1,0 +1,22 @@
+name: fluttermon
+description: fluttermon is a CLI tool that helps develop Flutter based applications by automatically hot reload the flutter/dart application when file changes in the directory are detected.
+version: 0.0.1
+homepage: https://github.com/KAnggara75/fluttermon
+
+executables:
+  fluttermon:
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  lints: ^1.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
