@@ -16,16 +16,6 @@ jobs:
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
-      - name: Zip Release
-        run: zip -x '*.git*' -r release.zip .
-
-      - name: Extract owner and repo
-        uses: jungwinter/split@v1
-        id: repo
-        with:
-          seperator: "/"
-          msg: ${{ github.repository }}
-
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.13
         with:
@@ -35,34 +25,8 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.13
         id: gitversion
 
-      - name: Install GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/setup@v0.9.13
-        with:
-          versionSpec: "0.13.x"
-
-      - name: Create release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/create@v0.9.13
+      - name: Create a Release in GitHub
+        uses: ncipollo/release-action@v1.10.0
         with:
           token: ${{ secrets.GH_TOKEN }}
-          owner: ${{ steps.repo.outputs._0 }}
-          repository: ${{ steps.repo.outputs._1 }}
-          milestone: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
-          name: "Release ${{ steps.gitversion.outputs.NuGetVersionV2 }}"
-          assets: |
-            release.zip
-
-      - name: Publish release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/publish@v0.9.13
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          owner: ${{ steps.repo.outputs._0 }}
-          repository: ${{ steps.repo.outputs._1 }}
-          tagName: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
-
-      - name: Close release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/close@v0.9.13
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          owner: ${{ steps.repo.outputs._0 }}
-          repository: ${{ steps.repo.outputs._1 }}
-          milestone: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+          tag: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
