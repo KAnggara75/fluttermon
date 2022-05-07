@@ -1,4 +1,6 @@
-[![🚀 Versioning](https://github.com/KAnggara75/fluttermon/actions/workflows/versioning.yaml/badge.svg)](https://github.com/KAnggara75/fluttermon/actions/workflows/versioning.yaml)
+[![📝 Versioning](https://github.com/KAnggara75/fluttermon/actions/workflows/versioning.yaml/badge.svg)](https://github.com/KAnggara75/fluttermon/actions/workflows/versioning.yaml)
+[![🧪 Dry test](https://github.com/KAnggara75/fluttermon/actions/workflows/dry-test.yaml/badge.svg)](https://github.com/KAnggara75/fluttermon/actions/workflows/dry-test.yaml)
+[![🚀 Publish to Pub.dev](https://github.com/KAnggara75/fluttermon/actions/workflows/CD.yaml/badge.svg)](https://github.com/KAnggara75/fluttermon/actions/workflows/CD.yaml)
 
 # Fluttermon
 

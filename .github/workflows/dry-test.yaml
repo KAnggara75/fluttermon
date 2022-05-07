@@ -1,0 +1,20 @@
+name: 🧪 Workflow test
+
+on: push
+
+jobs:
+  dry-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: ">> Dart package <<"
+        uses: k-paxian/dart-package-publisher@master
+        with:
+          accessToken: ${{ secrets.ACCESS }}
+          refreshToken: ${{ secrets.REFRESH }}
+          force: true
+          dryRunOnly: true
+          suppressBuildRunner: true
+          relativePath: package
