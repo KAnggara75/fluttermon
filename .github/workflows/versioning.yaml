@@ -1,0 +1,40 @@
+name: 🚀 Versioning
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  version:
+    name: Create version number
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.head_commit.message, 'pub:') }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Fetch all history for all tags and branches
+        run: |
+          git fetch --prune --depth=10000
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.11
+        with:
+          versionSpec: "5.8.x"
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.11
+      - name: Create version.txt with NuGetVersionV2
+        run: echo ${{ steps.gitversion.outputs.NuGetVersionV2  }} > version.txt
+      - name: Upload version.txt
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitversion
+          path: version.txt
+  release:
+    name: Create release tag
+    needs: [version]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ steps.version.outputs.content }}
+          message: ${{ github.event.head_commit.message }}
