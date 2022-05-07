@@ -34,6 +34,37 @@ class Fluttermon {
     _updater = null;
   }
 
+  void _manualInput(String input) {
+    if (input == 'r' ||
+        input == 'R' ||
+        input == 'v' ||
+        input == 'w' ||
+        input == 't' ||
+        input == 'L' ||
+        input == 'S' ||
+        input == 'U' ||
+        input == 'i' ||
+        input == 'p' ||
+        input == 'I' ||
+        input == 'o' ||
+        input == 'b' ||
+        input == 'P' ||
+        input == 'a' ||
+        input == 'M' ||
+        input == 'g' ||
+        input == 'h' ||
+        input == 'd') {
+      _process.stdin.write(input);
+    } else if (input == 'c') {
+      print("\x1B[2J\x1B[0;0H");
+    } else if (input == 'q') {
+      _process.stdin.write(input);
+      print("Application finished.");
+      _process.kill();
+      exit(0);
+    }
+  }
+
   Future<void> start() async {
     _process = await Process.start('flutter', ['run', ..._listOfArgs]);
     _process.stdout
@@ -50,5 +81,9 @@ class Fluttermon {
         }
       }
     });
+    readInput().listen(_manualInput);
   }
+
+  Stream<String> readInput() =>
+      stdin.transform(utf8.decoder).transform(const LineSplitter());
 }
