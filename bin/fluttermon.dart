@@ -10,6 +10,7 @@ class Fluttermon {
   late Process _process;
   final List<String> args;
   final List<String> _listOfArgs = [];
+  Future? _updater;
 
   Fluttermon(this.args) {
     _parseArgs();
@@ -25,11 +26,29 @@ class Fluttermon {
     print(line);
   }
 
+  Future<void> _hotReload() async {
+    await Future.delayed(
+      const Duration(milliseconds: 500),
+    );
+    _process.stdin.write('r');
+    _updater = null;
+  }
+
   Future<void> start() async {
     _process = await Process.start('flutter', ['run', ..._listOfArgs]);
     _process.stdout
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .forEach(_processLine);
+
+    final projectDir = File('.');
+    projectDir.watch(recursive: true).listen((event) {
+      if (event.path.startsWith('./lib')) {
+        if (_updater == null) {
+          print('Reloading.... ');
+          _updater = _hotReload();
+        }
+      }
+    });
   }
 }
