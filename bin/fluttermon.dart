@@ -28,11 +28,8 @@ class Fluttermon {
   Future<void> start() async {
     _process = await Process.start('flutter', ['run', ..._listOfArgs]);
     _process.stdout
-        .transform(
-          utf8.decoder,
-        )
-        .forEach(
-          _processLine,
-        );
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .forEach(_processLine);
   }
 }
