@@ -36,12 +36,12 @@ jobs:
         id: gitversion
 
       - name: Install GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/setup@v0.9.13
+        uses: gittools/actions/gitreleasemanager/setup@v0.9
         with:
           versionSpec: "0.11.x"
 
       - name: Create release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/create@v0.9.13
+        uses: gittools/actions/gitreleasemanager/create@v0.9
         with:
           token: ${{ secrets.GH_TOKEN }}
           owner: ${{ steps.repo.outputs._0 }}
@@ -52,7 +52,7 @@ jobs:
             release.zip
 
       - name: Publish release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/publish@v0.9.13
+        uses: gittools/actions/gitreleasemanager/publish@v0.9
         with:
           token: ${{ secrets.GH_TOKEN }}
           owner: ${{ steps.repo.outputs._0 }}
@@ -60,7 +60,7 @@ jobs:
           tagName: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
 
       - name: Close release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/close@v0.9.13
+        uses: gittools/actions/gitreleasemanager/close@v0.9
         with:
           token: ${{ secrets.GH_TOKEN }}
           owner: ${{ steps.repo.outputs._0 }}
