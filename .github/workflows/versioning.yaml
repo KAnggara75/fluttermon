@@ -40,6 +40,14 @@ jobs:
         with:
           versionSpec: "0.13.x"
 
+      - name: Open release with GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/open@v0.9.2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          owner: ${{ steps.repo.outputs._0 }}
+          repository: ${{ steps.repo.outputs._1 }}
+          milestone: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.9.13
         with:
