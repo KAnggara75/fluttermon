@@ -1,3 +1,5 @@
+[![🚀 Versioning](https://github.com/KAnggara75/fluttermon/actions/workflows/versioning.yaml/badge.svg)](https://github.com/KAnggara75/fluttermon/actions/workflows/versioning.yaml)
+
 # Fluttermon
 
 fluttermon is a CLI tool that helps develop Flutter based applications by automatically hot reload the flutter/dart application when file changes in the directory are detected.
