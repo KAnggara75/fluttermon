@@ -29,7 +29,7 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.13
         with:
-          versionSpec: "5.8.x"
+          versionSpec: "5.10.x"
 
       - name: Use GitVersion
         uses: gittools/actions/gitversion/execute@v0.9.13
@@ -38,7 +38,7 @@ jobs:
       - name: Install GitReleaseManager
         uses: gittools/actions/gitreleasemanager/setup@v0.9.13
         with:
-          versionSpec: "0.11.x"
+          versionSpec: "0.13.x"
 
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.9.13
