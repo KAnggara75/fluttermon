@@ -10,7 +10,6 @@ class Fluttermon {
   late Process _process;
   final List<String> args;
   final List<String> _listOfArgs = [];
-  Future? _updater;
 
   Fluttermon(this.args) {
     _parseArgs();
@@ -31,7 +30,6 @@ class Fluttermon {
       const Duration(milliseconds: 500),
     );
     _process.stdin.write('r');
-    _updater = null;
   }
 
   void _manualInput(String input) {
@@ -73,12 +71,9 @@ class Fluttermon {
         .forEach(_processLine);
 
     final projectDir = File('.');
-    projectDir.watch(recursive: true).listen((event) {
-      if (event.path.startsWith('./lib')) {
-        if (_updater == null) {
-          print('Reloading.... ');
-          _updater = _hotReload();
-        }
+    projectDir.watch(recursive: true).listen((e) {
+      if (e.path.startsWith('./lib')) {
+        _hotReload();
       }
     });
     readInput().listen(_manualInput);
