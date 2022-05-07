@@ -10,19 +10,59 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.head_commit.message, 'pub:') }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Fetch all history for all tags and branches
-        run: |
-          git fetch --prune --depth=10000
+        run: git fetch --prune --unshallow
+
+      - name: Zip Release
+        run: zip -x '*.git*' -r release.zip .
+
+      - name: Extract owner and repo
+        uses: jungwinter/split@v1
+        id: repo
+        with:
+          seperator: "/"
+          msg: ${{ github.repository }}
+
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.11
+        uses: gittools/actions/gitversion/setup@v0.9.13
         with:
           versionSpec: "5.8.x"
+
       - name: Use GitVersion
+        uses: gittools/actions/gitversion/execute@v0.9.13
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.11
-      - name: Create with NuGetVersionV2
-        uses: rickstaa/action-create-tag@v1
+
+      - name: Install GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/setup@v0.9.13
         with:
-          tag: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
-          message: ${{ github.event.head_commit.message }}
+          versionSpec: "0.11.x"
+
+      - name: Create release with GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/create@v0.9.13
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          owner: ${{ steps.repo.outputs._0 }}
+          repository: ${{ steps.repo.outputs._1 }}
+          milestone: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+          name: "Release ${{ steps.gitversion.outputs.NuGetVersionV2 }}"
+          assets: |
+            release.zip
+
+      - name: Publish release with GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/publish@v0.9.13
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          owner: ${{ steps.repo.outputs._0 }}
+          repository: ${{ steps.repo.outputs._1 }}
+          tagName: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
+
+      - name: Close release with GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/close@v0.9.13
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          owner: ${{ steps.repo.outputs._0 }}
+          repository: ${{ steps.repo.outputs._1 }}
+          milestone: ${{ steps.gitversion.outputs.NuGetVersionV2 }}
