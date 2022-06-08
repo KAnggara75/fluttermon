@@ -9,7 +9,7 @@ fluttermon is a CLI tool that helps develop Flutter based applications by automa
 ## Install
 
 ```
-flutter pub global activate fluttermon
+dart pub global activate fluttermon
 ```
 
 ## Running
