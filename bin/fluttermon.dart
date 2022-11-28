@@ -11,6 +11,7 @@ class Fluttermon {
   final List<String> args;
   final List<String> _listOfArgs = [];
 
+  // Constractor
   Fluttermon(this.args) {
     _parseArgs();
   }
@@ -26,40 +27,24 @@ class Fluttermon {
   }
 
   Future<void> _hotReload() async {
-    await Future.delayed(
-      const Duration(milliseconds: 500),
-    );
+    await Future.delayed(const Duration(milliseconds: 500));
     _process.stdin.write('r');
   }
 
-  void _manualInput(String input) {
-    if (input == 'r' ||
-        input == 'R' ||
-        input == 'v' ||
-        input == 'w' ||
-        input == 't' ||
-        input == 'L' ||
-        input == 'S' ||
-        input == 'U' ||
-        input == 'i' ||
-        input == 'p' ||
-        input == 'I' ||
-        input == 'o' ||
-        input == 'b' ||
-        input == 'P' ||
-        input == 'a' ||
-        input == 'M' ||
-        input == 'g' ||
-        input == 'h' ||
-        input == 'd') {
-      _process.stdin.write(input);
-    } else if (input == 'c') {
+  Future<void> _quit() async {
+    _process.stdin.write('q');
+    await Future.delayed(const Duration(milliseconds: 500));
+    _process.kill();
+    exit(await _process.exitCode);
+  }
+
+  void _manualInput(String input) async {
+    if (input == 'c') {
       print("\x1B[2J\x1B[0;0H");
     } else if (input == 'q') {
+      await _quit();
+    } else {
       _process.stdin.write(input);
-      print("Application finished.");
-      _process.kill();
-      exit(0);
     }
   }
 
