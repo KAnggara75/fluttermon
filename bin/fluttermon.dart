@@ -30,7 +30,7 @@ class Fluttermon {
     await Future.delayed(
       const Duration(milliseconds: 500),
     );
-    _process.stdin.write('r');
+    _process.stdin.write('R');
     _updater = null;
   }
 
