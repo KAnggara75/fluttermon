@@ -10,8 +10,8 @@ class Fluttermon {
   late Process _process;
   final List<String> args;
   final List<String> _listOfArgs = [];
+  Future? _updater;
 
-  // Constractor
   Fluttermon(this.args) {
     _parseArgs();
   }
@@ -27,24 +27,41 @@ class Fluttermon {
   }
 
   Future<void> _hotReload() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    _process.stdin.write('r');
+    await Future.delayed(
+      const Duration(milliseconds: 500),
+    );
+    _process.stdin.write('R');
+    _updater = null;
   }
 
-  Future<void> _quit() async {
-    _process.stdin.write('q');
-    await Future.delayed(const Duration(milliseconds: 500));
-    _process.kill();
-    exit(await _process.exitCode);
-  }
-
-  void _manualInput(String input) async {
-    if (input == 'c') {
+  void _manualInput(String input) {
+    if (input == 'r' ||
+        input == 'R' ||
+        input == 'v' ||
+        input == 'w' ||
+        input == 't' ||
+        input == 'L' ||
+        input == 'S' ||
+        input == 'U' ||
+        input == 'i' ||
+        input == 'p' ||
+        input == 'I' ||
+        input == 'o' ||
+        input == 'b' ||
+        input == 'P' ||
+        input == 'a' ||
+        input == 'M' ||
+        input == 'g' ||
+        input == 'h' ||
+        input == 'd') {
+      _process.stdin.write(input);
+    } else if (input == 'c') {
       print("\x1B[2J\x1B[0;0H");
     } else if (input == 'q') {
-      await _quit();
-    } else {
       _process.stdin.write(input);
+      print("Application finished.");
+      _process.kill();
+      exit(0);
     }
   }
 
@@ -56,9 +73,12 @@ class Fluttermon {
         .forEach(_processLine);
 
     final projectDir = File('.');
-    projectDir.watch(recursive: true).listen((e) {
-      if (e.path.startsWith('./lib')) {
-        _hotReload();
+    projectDir.watch(recursive: true).listen((event) {
+      if (event.path.startsWith('./lib')) {
+        if (_updater == null) {
+          print('Reloading.... ');
+          _updater = _hotReload();
+        }
       }
     });
     readInput().listen(_manualInput);
