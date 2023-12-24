@@ -30,6 +30,14 @@ class Fluttermon {
     await Future.delayed(
       const Duration(milliseconds: 500),
     );
+    _process.stdin.write('r');
+    _updater = null;
+  }
+
+  Future<void> _hotRefresh() async {
+    await Future.delayed(
+      const Duration(milliseconds: 500),
+    );
     _process.stdin.write('R');
     _updater = null;
   }
@@ -77,7 +85,7 @@ class Fluttermon {
       if (event.path.startsWith('./lib')) {
         if (_updater == null) {
           print('Reloading.... ');
-          _updater = _hotReload();
+          _updater = _hotRefresh();
         }
       }
     });
